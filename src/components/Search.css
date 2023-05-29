@@ -84,16 +84,18 @@
   width: 400px;
   margin: auto;
   place-items: center;
+  background-color: dimgray;
 }
 
 .icons {
   display:flex;
   position: absolute;
-  top:400%;
+  top:35%;
   left:50%;
   transform: translate(-50%,-50%);
   height: 120px;
   width: 120px;
+  background-color: #61dafb;
 }
 
 .availability {

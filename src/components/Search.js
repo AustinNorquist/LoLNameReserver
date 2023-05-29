@@ -5,18 +5,28 @@ import defaultIcon from '../images/defaultIcon.jpeg';
 
 function Search() {
   const [searchText, setSearchText] = useState("");
-  const [gameList, setGameList] =useState([]);
+  const [recentGame, setRecentGame] =useState([]);
+  const [playerData, setPlayerInfo] = useState([]);
 
-  function getPlayerGames(event) {
-    axios.get("http://localhost:4000/past5Games", { params: { username: searchText}})
+  function getRecentGame(event) {
+    axios.get("http://localhost:4000/recentGame", { params: { username: searchText}})
           .then(function(response){
-            setGameList(response.data);
+            setRecentGame(response.data);
           }).catch(function(error){
             console.log(error);
           })
   }
 
-  console.log(gameList);
+  function getPlayerInfo(event) {
+    axios.get("http://localhost:4000/playerInfo", { params: { username: searchText}})
+          .then(function(response){
+            setPlayerInfo(response.data);
+          }).catch(function(error){
+            console.log(error);
+          })
+  }
+
+  console.log(recentGame);
 
   return (
     <div className="App">
@@ -28,38 +38,51 @@ function Search() {
       </div>
       
       <div>
+
         <input 
           className='searchBox' 
           type='text'
           onChange={e => setSearchText(e.target.value)}
         >
         </input>
+
         <button 
           className='searchButton'
-          onClick={getPlayerGames}
+          onClick={() => {
+            getRecentGame();
+            getPlayerInfo();
+          }}
         >
           Search
         </button>
         
-        {gameList.length !== 0 ?
-          <>
-            <div className='searchResultContainer'>
-              <p>
-                found
-              </p> 
-            </div>
-          </>
-        :
-          <>
-            <div className='searchResultContainer'>
-              <h2 className='availability'>
-                Available!
-                <img src={defaultIcon} className='icons'/>
-              </h2>
-            </div>
-          </>
+        <div className='searchResultContainer'>
+          {
 
-        }
+            //every account with data has a level, undefined means no data 
+            playerData.summonerLevel !== undefined ?
+              //if there is data for the username,
+              //check if the 'recentGame' exceeds the decay time.
+              //level 1-6, 6 months
+              //level 12, 12 months
+              //level 20, 20 months
+              //level 30+, 30 months
+              
+              //compare if recentGame.'timestamp' is less than (current unix timestamp - 'x' unix months)
+              //if true, then the username has expired
+              //else the username is unavailable
+
+            <> 
+            
+            </>
+            :
+            <>
+                <h2 className='availability'> Available!</h2>
+                <img src={defaultIcon} className='icons'/>
+            </>
+
+          }
+        </div>
       
       </div>
     
