@@ -4,7 +4,7 @@ const axios = require('axios');
 
 var app = express();
 app.use(cors());
-const API_KEY = "RGAPI-c7bfade3-8bbb-44d4-9d4e-037a828d8cf0";
+const API_KEY = "RGAPI-a480ad90-5b9a-4ce3-91c3-26e28de231f6";
 
 function getPlayerPUUID(playerName){
     return axios.get("https://na1.api.riotgames.com" +
@@ -35,6 +35,7 @@ app.get('/recentGame', async(req,res) => {
                 .then(response => response.data)
                 .catch(err => err)
 
+
     //get the most recent TFT match
     const API_CALL_TFT = "https://americas.api.riotgames.com/" + 
                 "tft/match/v1/matches/by-puuid/" +
@@ -49,16 +50,24 @@ app.get('/recentGame', async(req,res) => {
                 "tft/match/v1/matches/" +
                 TFT_matchID + "?api_key=" + API_KEY)
                 .then(response => response.data)
-                .catch(err => err)  
-  
-    //always equal for some reason *fix*
-    if(TFT_matchData.game_datetime > LOL_matchData.gameEndTimestamp){
-        res.json(TFT_matchData);
+                .catch(err => err) 
+
+
+
+    var mostRecentTimestamp;
+    
+    if(TFT_matchData?.info?.game_datetime < LOL_matchData?.info?.gameEndTimestamp){
+        mostRecentTimestamp = LOL_matchData?.info?.gameEndTimestamp;
     }else{
-        res.json(LOL_matchData);
+        if(TFT_matchData?.info?.game_datetime > 0){
+            mostRecentTimestamp = TFT_matchData?.info?.game_datetime;
+        }else if(LOL_matchData?.info?.gameEndTimestamp > 0){
+            mostRecentTimestamp = LOL_matchData?.info?.gameEndTimestamp;
+        }
     }
 
-    
+    res.json(mostRecentTimestamp);
+
 });
 
 app.get('/playerInfo', async(req,res) => {
