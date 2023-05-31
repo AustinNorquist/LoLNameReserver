@@ -8,7 +8,6 @@ function Search() {
   const [recentGameTimestamp, setRecentGame] =useState([]);
   const [playerData, setPlayerInfo] = useState([]);
   var searchOpacity = document.getElementById('searchContainer');
-  var searchedName;
 
   function getRecentGame(event) {
     axios.get("http://localhost:4000/recentGame", { params: { username: searchText }})
@@ -130,7 +129,6 @@ function Search() {
             getRecentGame();
             getPlayerInfo();
             searchOpacity.style.opacity = "1";
-            searchedName = searchText;
           }}
         >
           Search
@@ -169,7 +167,6 @@ function Search() {
 
           }
         </div>
-      
       </div>
     
     </div>
