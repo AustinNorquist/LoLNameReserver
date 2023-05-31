@@ -38,7 +38,7 @@ function Search() {
         />
         <h2 className='username'>{user.name}</h2>
         <h2 className='level'>{user.summonerLevel}</h2>
-        <p className='expiration'>Expires: </p>
+        <p className='expiration'>Expired: </p>
         <p className='expirationDate'>{getFormattedDate(playerData,recentGameTimestamp)} </p>
       </>
     );
