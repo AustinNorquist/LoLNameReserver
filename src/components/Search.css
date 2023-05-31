@@ -80,16 +80,17 @@
   top: 60%;
   left: 50%;
   transform: translate(-50%,-50%);
-  height: 400px;
-  width: 400px;
+  height: 300px;
+  width: 300px;
   margin: auto;
   place-items: center;
+  opacity: 0%;
 }
 
 .icons {
   display:flex;
   position: absolute;
-  top:30%;
+  top:35%;
   left:50%;
   transform: translate(-50%,-50%);
   height: 120px;
@@ -100,7 +101,7 @@
 .availability {
   display:flex;
   position: absolute;
-  top: 5%;
+  top: 0%;
   left: 50%;
   transform: translate(-50%,-50%);
 }
@@ -108,7 +109,7 @@
 .username {
   display:flex;
   position: absolute;
-  top: 45%;
+  top: 55%;
   left:50%;
   transform: translate(-50%,-50%);
 
@@ -116,8 +117,25 @@
 
 .expiration {
   display:flex;
+  position:absolute;
+  top:77%;
+  left: 50%; 
+  transform: translate(-50%,-50%);
+  font-weight: bold;
+}
+
+.expirationDate {
+  display: flex;
   position: absolute;
-  top:55%;
-  left: 10%;
+  top:81%;
+  left: 28%;
+  transform: translate(-50%,-50);
+}
+
+.level {
+  display:flex;
+  position: absolute;
+  top: 65%;
+  left:50%;
   transform: translate(-50%,-50%);
 }

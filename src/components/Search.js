@@ -7,6 +7,8 @@ function Search() {
   const [searchText, setSearchText] = useState("");
   const [recentGameTimestamp, setRecentGame] =useState([]);
   const [playerData, setPlayerInfo] = useState([]);
+  var searchOpacity = document.getElementById('searchContainer');
+  var searchedName;
 
   function getRecentGame(event) {
     axios.get("http://localhost:4000/recentGame", { params: { username: searchText }})
@@ -26,20 +28,25 @@ function Search() {
           })
   }
 
-  function userAvailable(username){
+  function userAvailable(user){
     return (
-      <> 
-        <h2 className='availability'>Available!</h2>
-        <img src={defaultIcon} className='icons'/>
-        <h2 className='username'>{username}</h2>
+      <>
+        <h2 style={{color:'green'}} className='availability'>Available!</h2>
+        <img
+          className='icons' 
+          src={"http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/" + user.profileIconId + ".png"}
+        />
+        <h2 className='username'>{user.name}</h2>
+        <h2 className='level'>{user.summonerLevel}</h2>
+        <p className='expiration'>Expires: </p>
+        <p className='expirationDate'>{getFormattedDate(playerData,recentGameTimestamp)} </p>
       </>
     );
   }
 
-  function getExpirationDate(user) {
+  function getExpirationDate(user,recentGameTimestamp) {
     var decayMonths;
-    var resTime;
-    const oneMonth = 2629743 * 1000; //time in seconds
+    
     if(user.summonerLevel <= 6){
       decayMonths = 6;
     }else if(user.summonerLevel < 30){
@@ -48,38 +55,53 @@ function Search() {
       decayMonths = 30;
     }
 
-    resTime = decayMonths * oneMonth;
-    return resTime;
+    const date = new Date(recentGameTimestamp);
+    const dateObj = new Date(date.setMonth(date.getMonth() + decayMonths));
+
+    return dateObj.getTime();
   }
 
-  function isExpired(user,recentGameTimestamp) {
-    if((recentGameTimestamp + getExpirationDate(user) < Date.now())){
+  function isExpired(playerData) {
+    
+    const decayTime = getExpirationDate(playerData,recentGameTimestamp);
+
+    if((decayTime < Date.now())){
       return true;
     }else{
       return false;
     }
   }
 
-  function formattedExpirationDate(recentGameTimestamp){
-    var decayTime = getExpirationDate(playerData);
+  function getFormattedDate(playerData,recentGameTimestamp) {
+    
+    const decayTime = getExpirationDate(playerData,recentGameTimestamp);
+
+    const dateObj = new Date(decayTime);
+
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1; // add 1, since the first month is 0
+    const day = dateObj.getDate();
+    const hours = dateObj.getHours();
+    const minutes = dateObj.getMinutes();
+    const seconds = dateObj.getSeconds();
+
+    return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
   }
 
   function userUnavailable(user,recentGameTimestamp) {
     return (
       <>
-        <h2 className='availability'>Unavailable</h2>
+        <h2 style={{color:'red'}} className='availability'>Unavailable</h2>
         <img
           className='icons' 
           src={"http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/" + user.profileIconId +".png"}
         />
         <h2 className='username'>{user.name}</h2>
-        <p className='expiration'>Expires: {formattedExpirationDate(recentGameTimestamp)} </p>
+        <h2 className='level'>{user.summonerLevel}</h2>
+        <p className='expiration'>Expires: </p>
+        <p className='expirationDate'>{getFormattedDate(playerData,recentGameTimestamp)} </p>
       </>
     );
-  }
-
-  function handleSearchContainer(){
-
   }
 
   console.log(recentGameTimestamp);
@@ -107,12 +129,14 @@ function Search() {
           onClick={() => {
             getRecentGame();
             getPlayerInfo();
+            searchOpacity.style.opacity = "1";
+            searchedName = searchText;
           }}
         >
           Search
         </button>
         
-        <div className='searchResultContainer'>
+        <div id = 'searchContainer' className='searchResultContainer'>
           {
             //every account with data has a level, undefined means no data 
             playerData.summonerLevel !== undefined ?
@@ -120,10 +144,10 @@ function Search() {
             <>
               {
                //display based on if isExpired
-               isExpired(playerData,recentGameTimestamp) ? 
+               isExpired(playerData) ? 
                <>
                 <p>
-                  {userAvailable(playerData.name)}
+                  {userAvailable(playerData)}
                 </p>
                </>
 
@@ -131,17 +155,16 @@ function Search() {
 
                <>
                 <p>
-                  {userUnavailable(playerData,recentGameTimestamp)}
+                  {userUnavailable(playerData,recentGameTimestamp,true)}
                 </p>
                </>
               }
             </>
             : //no player data found
             <>
-              <p>
-                no player data found
-                {userAvailable()}
-              </p> 
+              <h2 className='availability'>Available!</h2>
+              <img src={defaultIcon} className='icons'/>
+              <h2 className='username'></h2>
             </>
 
           }
