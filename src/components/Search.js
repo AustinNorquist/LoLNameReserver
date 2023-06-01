@@ -2,17 +2,18 @@ import './Search.css';
 import React, { useState } from 'react';
 import axios from 'axios';
 import defaultIcon from '../images/defaultIcon.jpeg';
+import * as moment from 'moment';
 
 function Search() {
   const [searchText, setSearchText] = useState("");
-  const [recentGameTimestamp, setRecentGame] =useState([]);
+  const [recentActivity, setRecentActivity] =useState([]);
   const [playerData, setPlayerInfo] = useState([]);
   var searchOpacity = document.getElementById('searchContainer');
 
   function getRecentGame(event) {
     axios.get("http://localhost:4000/recentGame", { params: { username: searchText }})
           .then(function(response){
-            setRecentGame(response.data);
+            setRecentActivity(response.data);
           }).catch(function(error){
             console.log(error);
           })
@@ -38,12 +39,12 @@ function Search() {
         <h2 className='username'>{user.name}</h2>
         <h2 className='level'>{user.summonerLevel}</h2>
         <p className='expiration'>Expired: </p>
-        <p className='expirationDate'>{getFormattedDate(playerData,recentGameTimestamp)} </p>
+        <p className='expirationDate'>{getFormattedDate(playerData,recentActivity)} </p>
       </>
     );
   }
 
-  function getExpirationDate(user,recentGameTimestamp) {
+  function getExpirationDate(user,recentActivity) {
     var decayMonths;
     
     if(user.summonerLevel <= 6){
@@ -54,7 +55,7 @@ function Search() {
       decayMonths = 30;
     }
 
-    const date = new Date(recentGameTimestamp);
+    const date = new Date(recentActivity);
     const dateObj = new Date(date.setMonth(date.getMonth() + decayMonths));
 
     return dateObj.getTime();
@@ -62,7 +63,7 @@ function Search() {
 
   function isExpired(playerData) {
     
-    const decayTime = getExpirationDate(playerData,recentGameTimestamp);
+    const decayTime = getExpirationDate(playerData,recentActivity);
 
     if((decayTime < Date.now())){
       return true;
@@ -71,23 +72,17 @@ function Search() {
     }
   }
 
-  function getFormattedDate(playerData,recentGameTimestamp) {
+  function getFormattedDate(playerData,recentActivity) {
     
-    const decayTime = getExpirationDate(playerData,recentGameTimestamp);
+    const decayTime = getExpirationDate(playerData,recentActivity);
 
     const dateObj = new Date(decayTime);
+    dateObj.setHours(dateObj.getHours()-1);
 
-    const year = dateObj.getFullYear();
-    const month = dateObj.getMonth() + 1; // add 1, since the first month is 0
-    const day = dateObj.getDate();
-    const hours = dateObj.getHours();
-    const minutes = dateObj.getMinutes();
-    const seconds = dateObj.getSeconds();
-
-    return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+    return moment(dateObj).format('MMMM Do YYYY, h:mm:ss a');
   }
 
-  function userUnavailable(user,recentGameTimestamp) {
+  function userUnavailable(user,recentActivity) {
     return (
       <>
         <h2 style={{color:'red'}} className='availability'>Unavailable</h2>
@@ -98,22 +93,20 @@ function Search() {
         <h2 className='username'>{user.name}</h2>
         <h2 className='level'>{user.summonerLevel}</h2>
         <p className='expiration'>Expires: </p>
-        <p className='expirationDate'>{getFormattedDate(playerData,recentGameTimestamp)} </p>
+        <p className='expirationDate'>{getFormattedDate(playerData,recentActivity)} </p>
       </>
     );
   }
 
-  console.log(recentGameTimestamp);
+  console.log(recentActivity);
 
   return (
     <div className="App">
-      
       <div className='header'>
-        <a className='headerLogo'>
+        <title className='headerLogo'>
           dafa
-        </a>
+        </title>
       </div>
-      
       <div>
 
         <input 
@@ -153,7 +146,7 @@ function Search() {
 
                <>
                 <p>
-                  {userUnavailable(playerData,recentGameTimestamp,true)}
+                  {userUnavailable(playerData,recentActivity,true)}
                 </p>
                </>
               }
@@ -168,9 +161,7 @@ function Search() {
           }
         </div>
       </div>
-    
     </div>
-  
   );
 }
 

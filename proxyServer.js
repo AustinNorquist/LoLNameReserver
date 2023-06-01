@@ -4,7 +4,7 @@ const axios = require('axios');
 
 var app = express();
 app.use(cors());
-const API_KEY = "RGAPI-a960d662-eea7-45f5-a215-2dace8daa572";
+const API_KEY = "RGAPI-9624379b-6bf2-4c96-abec-bd8509b66ed9";
 
 function getPlayerPUUID(playerName){
     return axios.get("https://na1.api.riotgames.com" +
@@ -48,8 +48,6 @@ app.get('/playerInfo', async(req,res) => {
     res.json(playerData);
 
 });
-
-
 
 app.listen(4000, function() {
     console.log("Server started on port 4000");
