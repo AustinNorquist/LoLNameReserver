@@ -36,12 +36,21 @@ function Search() {
           className='icons' 
           src={"http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/" + user.profileIconId + ".png"}
         />
-        <h2 className='username'>{user.name}</h2>
+        <h2 className='username'>
+          <a>
+            {user.name}
+          </a>
+        </h2>
         <h2 className='level'>{user.summonerLevel}</h2>
         <p className='expiration'>Expired: </p>
         <p className='expirationDate'>{getFormattedDate(playerData,recentActivity)} </p>
       </>
     );
+  }
+
+  const openInNewTab = (url) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null
   }
 
   function getExpirationDate(user,recentActivity) {
@@ -90,7 +99,11 @@ function Search() {
           className='icons' 
           src={"http://ddragon.leagueoflegends.com/cdn/13.10.1/img/profileicon/" + user.profileIconId +".png"}
         />
-        <h2 className='username'>{user.name}</h2>
+        <h1 
+          onClick={() => openInNewTab('https://www.op.gg/summoners/na/' + playerData.name)}
+          className='username'>
+            {user.name}
+        </h1>
         <h2 className='level'>{user.summonerLevel}</h2>
         <p className='expiration'>Expires: </p>
         <p className='expirationDate'>{getFormattedDate(playerData,recentActivity)} </p>

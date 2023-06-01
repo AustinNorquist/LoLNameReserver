@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  color: white;
 }
 
 .App-logo {
@@ -35,6 +36,10 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.username :hover {
+  color:coral;
 }
 
 .container {
@@ -96,6 +101,8 @@
   transform: translate(-50%,-50%);
   height: 120px;
   width: 120px;
+  border-style: double;
+  border-color: white;
 }
 
 .availability {
@@ -113,12 +120,13 @@
   top: 55%;
   left: 50%;
   transform: translate(-50%,-50%);
+  cursor: pointer;
 }
 
 .expiration {
   display:inline;
   position:absolute;
-  top:77%;
+  top:80%;
   left: 50%; 
   transform: translate(-50%,-50%);
   font-weight: bold;
@@ -127,7 +135,7 @@
 .expirationDate {
   display: flex;
   position: absolute;
-  top:87%;
+  top:90%;
   left:50%;
   width: 60%;
   transform: translate(-50%,-50%);
@@ -136,7 +144,7 @@
 .level {
   display:flex;
   position: absolute;
-  top: 65%;
+  top: 68%;
   left:50%;
   transform: translate(-50%,-50%);
 }
