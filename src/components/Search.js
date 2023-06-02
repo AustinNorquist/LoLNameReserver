@@ -111,35 +111,49 @@ function Search() {
     );
   }
 
+  function handleSearch(event) {
+    return (
+      <>
+        getRecentGame();
+        getPlayerInfo();
+        searchOpacity.style.opacity = "1";
+      </>
+    )
+  }
+
   console.log(recentActivity);
 
   return (
     <div className="App">
-      <div className='header'>
-        <title className='headerLogo'>
-          dafa
-        </title>
-      </div>
       <div>
+        <h2 className='header'>Search for a username</h2>
+        <div className='searchField'>
+          <input 
+            className='searchBox' 
+            type='text'
+            placeholder='Enter a username...'
+            onChange={e => setSearchText(e.target.value)}
+            onKeyDown={(event) => {
+              if(event.key === "Enter"){
+                getRecentGame();
+                getPlayerInfo();
+                searchOpacity.style.opacity = "1";
+              }
+            }}
+          >
+          </input>
 
-        <input 
-          className='searchBox' 
-          type='text'
-          onChange={e => setSearchText(e.target.value)}
-        >
-        </input>
-
-        <button 
-          className='searchButton'
-          onClick={() => {
-            getRecentGame();
-            getPlayerInfo();
-            searchOpacity.style.opacity = "1";
-          }}
-        >
-          Search
-        </button>
-        
+          <button 
+            className='searchButton'
+            onClick={() => {
+              getRecentGame();
+              getPlayerInfo();
+              searchOpacity.style.opacity = "1";
+            }}
+          >
+            Search
+          </button>
+        </div>
         <div id = 'searchContainer' className='searchResultContainer'>
           {
             //every account with data has a level, undefined means no data 

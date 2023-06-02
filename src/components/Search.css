@@ -37,6 +37,9 @@
     transform: rotate(360deg);
   }
 }
+.header {
+  margin-top: 7%;
+}
 
 .username :hover {
   color:coral;
@@ -65,19 +68,33 @@
   justify-content: center;
 }
 
+.searchField {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width:100%;
+  margin: auto;
+  background-color: #61dafb;
+}
+
 .searchBox {
   position:absolute;
   top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
   width:25%;
+  padding: .25rem;
 }
 
 .searchButton {
   position:absolute;
   top: 25%;
   left: 65%;
+  width: 65px;
   transform: translate(-50%, -50%);
+  padding: .25rem;
+  cursor: pointer;
 }
 
 .searchResultContainer {
