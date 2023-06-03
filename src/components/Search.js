@@ -111,16 +111,6 @@ function Search() {
     );
   }
 
-  function handleSearch(event) {
-    return (
-      <>
-        getRecentGame();
-        getPlayerInfo();
-        searchOpacity.style.opacity = "1";
-      </>
-    )
-  }
-
   console.log(recentActivity);
 
   return (
@@ -134,7 +124,7 @@ function Search() {
             placeholder='Enter a username...'
             onChange={e => setSearchText(e.target.value)}
             onKeyDown={(event) => {
-              if(event.key === "Enter"){
+              if(event.key === "Enter" && searchText.length >= 3 && searchText.length <= 15){
                 getRecentGame();
                 getPlayerInfo();
                 searchOpacity.style.opacity = "1";
@@ -146,9 +136,11 @@ function Search() {
           <button 
             className='searchButton'
             onClick={() => {
-              getRecentGame();
-              getPlayerInfo();
-              searchOpacity.style.opacity = "1";
+              if(searchText.length >= 3 && searchText.length <= 15){
+                getRecentGame();
+                getPlayerInfo();
+                searchOpacity.style.opacity = "1";
+              }
             }}
           >
             Search
@@ -173,16 +165,22 @@ function Search() {
 
                <>
                 <p>
-                  {userUnavailable(playerData,recentActivity,true)}
+                  {userUnavailable(playerData,recentActivity)}
                 </p>
                </>
               }
             </>
             : //no player data found
             <>
-              <h2 className='availability'>Available!</h2>
+              <h2 
+                style={{color:'green'}}
+                className='availability'>Available!
+              </h2>
               <img src={defaultIcon} className='icons'/>
               <h2 className='username'></h2>
+              <p  className='expiration'
+              
+              >No Player Data Found.</p>
             </>
 
           }

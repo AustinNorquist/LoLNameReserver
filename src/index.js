@@ -3,15 +3,27 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import './App.css';
 import './components/Navbar.css';
-import Search from './components/Search';
+import Login from './components/Login.js'
+import Search from './components/Search.js';
 import reportWebVitals from './reportWebVitals';
 import App from '../src/App'
 import { BrowserRouter } from 'react-router-dom';
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+var loggedIn = false;
 root.render(
   <BrowserRouter>
-    <App/>
+    {
+      loggedIn ?
+      <>
+        <App/>
+      </>
+      :
+      <>
+        <Login/>
+      </>
+    }
   </BrowserRouter>
 );
 
