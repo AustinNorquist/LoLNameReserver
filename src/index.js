@@ -11,19 +11,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-var loggedIn = false;
 root.render(
   <BrowserRouter>
-    {
-      loggedIn ?
-      <>
-        <App/>
-      </>
-      :
-      <>
-        <Login/>
-      </>
-    }
+    <App/>
   </BrowserRouter>
 );
 

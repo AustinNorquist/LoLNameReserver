@@ -124,7 +124,7 @@ function Search() {
             placeholder='Enter a username...'
             onChange={e => setSearchText(e.target.value)}
             onKeyDown={(event) => {
-              if(event.key === "Enter" && searchText.length >= 3 && searchText.length <= 15){
+              if(event.key === "Enter" && searchText.length >= 3 && searchText.length <= 16){
                 getRecentGame();
                 getPlayerInfo();
                 searchOpacity.style.opacity = "1";

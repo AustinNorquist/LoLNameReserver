@@ -8,9 +8,10 @@ export default function Navbar() {
             LoL Name Reserver
           </Link>
           <ul>
-            <CustomLink to="/">Home</CustomLink>
+            <CustomLink to="/Home">Home</CustomLink>
             <CustomLink to="/Search">Search</CustomLink>
             <CustomLink to="/Profile">Profile</CustomLink>
+            <CustomLink to="/Login">Login</CustomLink>
             <CustomLink to="/Logout">Logout</CustomLink>
           </ul>
         </nav>

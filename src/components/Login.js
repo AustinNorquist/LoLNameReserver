@@ -1,10 +1,20 @@
-import './Login.css';
+import './Login.css'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createClient } from '@supabase/supabase-js';
+import { Auth } from '@supabase/auth-ui-react';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
+import { Navigate, useNavigate } from 'react-router-dom';
+import App from '../App';
+
+const supabaseUrl = 'https://cjqwfctqdxtwyvvqohya.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcXdmY3RxZHh0d3l2dnFvaHlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU3MzEyNzYsImV4cCI6MjAwMTMwNzI3Nn0.sy61dt6QbjsdPFDGd4Ej7_zO65vi4MPWvqq_bH3KwU8';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -14,25 +24,46 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle login logic here
-    console.log('Username:', username);
-    console.log('Password:', password);
-  };
+
+    try {
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: username,
+            password: password,
+        })
+
+        if (error) {
+            console.error('Login error:', error.message);
+            return;
+        }
+
+        if (!data) {
+            <h2>Email or password do not exist.</h2>
+            console.error('Invalid credentials');
+            return;
+        }
+
+        console.log('User:', data);
+        navigate("/Home")
+        } catch (error) {
+        console.error('Login error:', error.message);
+        }
+    };
 
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>LoL Name Reserver Login</h2>
+        <h2>Login</h2>
         <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
-            <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
-            <button type="submit">Log In</button>
-            <p className="register-text">
-                Don't have an account?
-                <a href="/Register" className="register-link">Register</a>
-            </p>
+          <input type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
+          <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+          <button type="submit">Log In</button>
+          <p className="register-text">
+            Don't have an account?
+            <a href="/register" className="register-link">Register</a>
+          </p>
         </form>
       </div>
     </div>

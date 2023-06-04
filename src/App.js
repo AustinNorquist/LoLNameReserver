@@ -13,7 +13,8 @@ export default function App() {
         <Navbar/>
         <div className='container'>
             <Routes>
-                <Route path="/" element={<Home/>}/> 
+                <Route path="/Home" element={<Home/>}/>
+                <Route path="/Login" element={<Login/>}/>
                 <Route path="/Search" element={<Search/>}/>
                 <Route path="/Profile" element={<Profile/>}/>
             </Routes>     
