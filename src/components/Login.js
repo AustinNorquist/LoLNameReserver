@@ -12,12 +12,12 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -30,7 +30,7 @@ const LoginPage = () => {
     try {
 
         const { data, error } = await supabase.auth.signInWithPassword({
-            email: username,
+            email: email,
             password: password,
         })
 
@@ -57,7 +57,7 @@ const LoginPage = () => {
       <div className="login-box">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
+          <input type="text" placeholder="Email" value={email} onChange={handleEmailChange} />
           <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
           <button type="submit">Log In</button>
           <p className="register-text">
