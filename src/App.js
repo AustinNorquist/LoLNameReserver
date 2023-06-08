@@ -5,6 +5,7 @@ import Home from '../src/components/Home.js';
 import Profile from '../src/components/Profile.js';
 import Navbar from './components/Navbar.js';
 import Login from './components/Login.js';
+import Register from './components/Register.js';
 import { Route, Routes } from 'react-router-dom';
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
             <Routes>
                 <Route path="/Home" element={<Home/>}/>
                 <Route path="/Login" element={<Login/>}/>
+                <Route path="/Register" element={<Register/>}/>
                 <Route path="/Search" element={<Search/>}/>
                 <Route path="/Profile" element={<Profile/>}/>
             </Routes>     
