@@ -39,7 +39,12 @@ export default function Navbar() {
       <ul>
         <CustomLink to="/">Home</CustomLink>
         <CustomLink to="/Search">Search</CustomLink>
-        <CustomLink to="/Profile">Profile</CustomLink>
+        { user ? (
+          <CustomLink to="/Profile">Profile</CustomLink>
+        ):(
+          <CustomLink to="/Login">Profile</CustomLink>
+        )}
+        
         {user ? (
           <CustomLink onClick={handleLogout}>Logout</CustomLink>
         ) : (
