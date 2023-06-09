@@ -2,6 +2,13 @@ import './Home.css'
 
 export default function Home() {
     return (
-        <h2 className="header">Welcome to LoL Name Reserver</h2>
+        <div>
+            
+            <div className='welcomeContainer'>
+                <p>
+                    adfafd
+                </p>
+            </div>
+        </div>
     )
 }

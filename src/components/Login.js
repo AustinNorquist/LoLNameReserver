@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -36,6 +37,7 @@ const LoginPage = () => {
 
         if (error) {
             console.error('Login error:', error.message);
+            setErrorMessage("Invalid email or password.");
             return;
         }
 
@@ -46,7 +48,7 @@ const LoginPage = () => {
         }
 
         console.log('User:', data);
-        navigate("/Home")
+        navigate("/")
         } catch (error) {
         console.error('Login error:', error.message);
         }
@@ -60,6 +62,7 @@ const LoginPage = () => {
           <input type="text" placeholder="Email" value={email} onChange={handleEmailChange} />
           <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
           <button type="submit">Log In</button>
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <p className="register-text">
             Don't have an account?
             <a href="/Register" className="register-link">Register</a>

@@ -2,6 +2,6 @@ import './Profile.css'
 
 export default function Profile() {
     return (
-        <h2>Profile</h2>
+        <h2 style={{color:'white'}}>Profile</h2>
     )
 }
