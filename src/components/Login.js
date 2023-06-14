@@ -35,6 +35,7 @@ const LoginPage = () => {
             password: password,
         })
 
+
         if (error) {
             console.error('Login error:', error.message);
             setErrorMessage("Invalid email or password.");

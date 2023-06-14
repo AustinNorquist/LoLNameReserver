@@ -1,8 +1,13 @@
 import './Search.css';
-import React, { useState } from 'react';
 import axios from 'axios';
 import defaultIcon from '../images/defaultIcon.jpeg';
 import * as moment from 'moment';
+import { createClient } from '@supabase/supabase-js';
+import React, { useEffect, useState } from 'react';
+
+const supabaseUrl = 'https://cjqwfctqdxtwyvvqohya.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqcXdmY3RxZHh0d3l2dnFvaHlhIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU3MzEyNzYsImV4cCI6MjAwMTMwNzI3Nn0.sy61dt6QbjsdPFDGd4Ej7_zO65vi4MPWvqq_bH3KwU8';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 function Search() {
   const [searchText, setSearchText] = useState("");
@@ -26,6 +31,33 @@ function Search() {
           }).catch(function(error){
             console.log(error);
           })
+  }
+
+  async function getCurrentUserEmail() {
+  
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (user) {
+      const email = user.email;
+      return email;
+    }
+  }
+
+  function handleClaim() {
+    //get the email of the current user
+    //insert searchText into the user's reservedNames
+    
+      const insertToDb = async () => {
+        const email = await getCurrentUserEmail();
+
+
+        const { data, error } = await supabase
+          .from('reserved')
+          .update({reservedName: searchText}, {upsert: true})
+          .eq('email',email)
+      };
+ 
+      insertToDb();
   }
 
   function userAvailable(user){
@@ -107,6 +139,7 @@ function Search() {
         <h2 className='level'>{user.summonerLevel}</h2>
         <p className='expiration'>Expires: </p>
         <p className='expirationDate'>{getFormattedDate(playerData,recentActivity)} </p>
+        <button className="claim-button" onClick={handleClaim}>Claim</button>
       </>
     );
   }
@@ -181,6 +214,7 @@ function Search() {
               <p  className='expiration'
               
               >No Player Data Found.</p>
+              <button className="claim-button" onClick={handleClaim}>Claim</button>
             </>
 
           }

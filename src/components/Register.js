@@ -24,28 +24,35 @@ const Register = () => {
     setPassword(event.target.value);
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
 
-        const { data, error } = await supabase.auth.signUp({
+        const { user, error_t } = await supabase.auth.signUp({
             email: email,
             password: password,
         })
 
-        if (error) {
-            console.error('Login error:', error.message);
-            return;
+        if(!error_t){
+
+          const { data, insertError } = await supabase
+          .from('reserved')
+          .insert([
+            { email: email, reservedName: null, player_data_reserved: null }
+          ])
+          console.log(email);
+        
+
+          if (insertError) {
+            console.error('Error inserting email into reserved table:', insertError.message);
+          } else {
+            console.log('Email inserted into reserved table:', data);
+          }
         }
 
-        if (!data) {
-            <h2>Email or password do not exist.</h2>
-            console.error('Invalid credentials');
-            return;
-        }
-
-        console.log('User:', data);
+        console.log('User:', user);
         navigate("/Home")
         } catch (error) {
         console.error('Login error:', error.message);
