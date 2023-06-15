@@ -44,17 +44,49 @@ function Search() {
   }
 
   function handleClaim() {
-    //get the email of the current user
-    //insert searchText into the user's reservedNames
-    
+      
       const insertToDb = async () => {
         const email = await getCurrentUserEmail();
 
+        const { data: existingData, error: existingError } = await supabase
+          .from('reserved')
+          .select('reservedName')
+          .eq('email', email)
+          .single();
+        
+        if (existingError) {
+          console.error('Error retrieving existing data:', existingError);
+          return;
+        }
+
+        let updatedNames;
+
+        if (Array.isArray(existingData.reservedName)) {
+          // Append the new name to the existing names array
+          const lowercaseNames = existingData.reservedName.map((name) => name.toLowerCase());
+          const lowercaseNewName = searchText.toLowerCase();
+          
+          if (lowercaseNames.includes(lowercaseNewName)) {
+            console.log('Name already exists in the array.');
+            return;
+          }
+
+          updatedNames = [...existingData.reservedName, searchText];
+        } else {
+          // Create a new array with the existing name (if any) and the new name
+          updatedNames = existingData.reservedName ? [existingData.reservedName, searchText] : [searchText];
+        }
 
         const { data, error } = await supabase
           .from('reserved')
-          .update({reservedName: searchText}, {upsert: true})
+          .update({ reservedName: updatedNames })
           .eq('email',email)
+
+        if (error) {
+          console.error('Error updating data:', error);
+        } else {
+          console.log('Name appended successfully:', data);
+        }
       };
  
       insertToDb();

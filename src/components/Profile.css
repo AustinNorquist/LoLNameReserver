@@ -1,0 +1,19 @@
+.header {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+}
+
+.reserved-names-list {
+    color: white;
+    list-style-type: none;
+    padding: 0;
+  }
+  
+.reserved-names-list li {
+    margin-bottom: 5px;
+}
+  

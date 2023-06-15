@@ -9,50 +9,43 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function getCurrentUserEmail() {
   
-  
     const { data: { user } } = await supabase.auth.getUser();
     
-    /*
-    if (error) {
-        console.error(error);
-        return null;
-    }
-    */
-    
     if (user) {
-        const email = user.id;
+        const email = user.email;
         return email;
     }
     //return null;
 }
 
 export default function Profile() {
-  const [username, setUsername] = useState('');
+  const [reservedNames, setReservedNames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsername = async () => {
       const email = await getCurrentUserEmail();
-      
+      console.log(email);
+
       if (email) {
         try {
-          
-            let { data: reserved, error } = await supabase
+          let { data: reserved, error } = await supabase
             .from('reserved')
             .select('reservedName')
-            .eq('email',email)
-            
-            if (error) {
-                throw new Error(error.message);
-            } else if (reserved) {
-                const { reservedName } = reserved[0];
-                setUsername(reservedName);
-            }
+            .eq('email', email);
+          
+        if (error) {
+            throw new Error(error.message);
+          } else if (reserved && reserved.length > 0) {
+            const reservedNamesArray = reserved[0]?.reservedName || [];
+            setReservedNames(reservedNamesArray);
+          }
         } catch (error) {
-          setError(error.message);
+            setError(error.message);
         }
       }
+
       setIsLoading(false);
     };
 
@@ -60,8 +53,8 @@ export default function Profile() {
   }, []);
 
   useEffect(() => {
-    console.log(username); // Log the updated username value
-  }, [username]);
+    console.log(reservedNames); // Log the updated username value
+  }, [reservedNames]);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -72,9 +65,20 @@ export default function Profile() {
   }
 
   return (
-    <h2 style={{color:'white'}}>
-        adsfaf: {username}
-    </h2>
+    <div>
+        <h2 style={{color:'white'}}>
+            Reserved Usernames:
+        </h2>
+
+    <ul className="reserved-names-list">
+        {reservedNames.length > 0 ? (
+          reservedNames.map((name, index) => <li key={index}>{name}</li>)
+        ) : (
+          <li>No reserved names found.</li>
+        )}
+    </ul>
+
+    </div>
   );
   
   
