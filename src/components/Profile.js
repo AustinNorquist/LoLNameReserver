@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-
+import axios from 'axios';
 import './Profile.css';
 
 const supabaseUrl = 'https://cjqwfctqdxtwyvvqohya.supabase.co';
@@ -15,41 +15,66 @@ async function getCurrentUserEmail() {
         const email = user.email;
         return email;
     }
-    //return null;
 }
 
 export default function Profile() {
-  const [reservedNames, setReservedNames] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [reservedNames, setReservedNames] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [playerData, setPlayerInfo] = useState([]);
+    const [playerLevels, setPlayerLevels] = useState([]);
 
-  useEffect(() => {
-    const fetchUsername = async () => {
-      const email = await getCurrentUserEmail();
-      console.log(email);
-
-      if (email) {
-        try {
-          let { data: reserved, error } = await supabase
-            .from('reserved')
-            .select('reservedName')
-            .eq('email', email);
-          
-        if (error) {
-            throw new Error(error.message);
-          } else if (reserved && reserved.length > 0) {
-            const reservedNamesArray = reserved[0]?.reservedName || [];
-            setReservedNames(reservedNamesArray);
-          }
-        } catch (error) {
-            setError(error.message);
-        }
+    function getPlayerInfo(uname) {
+        return axios
+          .get("http://localhost:4000/playerInfo", { params: { username: uname } })
+          .then(function (response) {
+            return response.data.summonerLevel;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
+      
 
-      setIsLoading(false);
-    };
+    useEffect(() => {
+        console.log(reservedNames); // Log the updated username value
 
-    fetchUsername();
+        const getPlayerLevels = async () => {
+        const levels = await Promise.all(
+            reservedNames.map((name) => getPlayerInfo(name))
+        );
+        setPlayerLevels(levels);
+        };
+
+        getPlayerLevels();
+    }, [reservedNames]);
+
+    useEffect(() => {
+        const fetchUsername = async () => {
+        const email = await getCurrentUserEmail();
+        console.log(email);
+        
+        if (email) {
+            try {
+            let { data: reserved, error } = await supabase
+                .from('reserved')
+                .select('reservedName')
+                .eq('email', email);
+            
+            if (error) {
+                throw new Error(error.message);
+            } else if (reserved && reserved.length > 0) {
+                const reservedNamesArray = reserved[0]?.reservedName || [];
+                setReservedNames(reservedNamesArray);
+            }
+            } catch (error) {
+                setError(error.message);
+            }
+        }
+        setIsLoading(false);
+        };
+
+        fetchUsername();
   }, []);
 
   useEffect(() => {
@@ -66,20 +91,18 @@ export default function Profile() {
 
   return (
     <div>
-        <h2 style={{color:'white'}}>
-            Reserved Usernames:
-        </h2>
-
-    <ul className="reserved-names-list">
+      {/* ... */}
+      <ul className="reserved-names-list">
         {reservedNames.length > 0 ? (
-          reservedNames.map((name, index) => <li key={index}>{name}</li>)
+          reservedNames.map((name, index) => (
+            <li key={index}>
+              {name}: {playerLevels[index] || 'Loading...'}
+            </li>
+          ))
         ) : (
           <li>No reserved names found.</li>
         )}
-    </ul>
-
+      </ul>
     </div>
   );
-  
-  
 }

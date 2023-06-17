@@ -4,7 +4,7 @@ const axios = require('axios');
 
 var app = express();
 app.use(cors());
-const API_KEY = "RGAPI-28818312-ddd1-49cc-abbd-1777e31c1d9e";
+const API_KEY = "RGAPI-2994e7cc-d4cd-4e8d-80af-e1067e25620e";
 
 function getPlayerPUUID(playerName){
     return axios.get("https://na1.api.riotgames.com" +

@@ -152,7 +152,7 @@ function Search() {
     const dateObj = new Date(decayTime);
     dateObj.setHours(dateObj.getHours()-1);
 
-    return moment(dateObj).format('MMMM Do YYYY, h:mm:ss a');
+    return moment(dateObj).format('MMMM Do YYYY, hh:mm:ss a');
   }
 
   function userUnavailable(user,recentActivity) {
@@ -181,7 +181,6 @@ function Search() {
   return (
     <div className="App">
       <div>
-        <h2 className='header'>Search for a username</h2>
         <div className='searchField'>
           <input 
             className='searchBox' 
@@ -246,7 +245,8 @@ function Search() {
               <p  className='expiration'
               
               >No Player Data Found.</p>
-              <button className="claim-button" onClick={handleClaim}>Claim</button>
+              <button className="claim-button" 
+                onClick={handleClaim}>Claim</button>
             </>
 
           }
