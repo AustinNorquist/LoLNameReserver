@@ -44,7 +44,6 @@ function Search() {
   }
 
   function handleClaim() {
-      
       const insertToDb = async () => {
         const email = await getCurrentUserEmail();
 
